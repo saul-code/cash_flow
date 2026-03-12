@@ -1,0 +1,926 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap");
+
+/* ── VARIABLES ─────────────────────────────────────────────────────────────── */
+:root {
+    --cf-bg: #0a0d12;
+    --cf-surface: #111620;
+    --cf-surface2: #181f2e;
+    --cf-border: rgba(255, 255, 255, 0.07);
+    --cf-accent: #00e5a0;
+    --cf-accent2: #0099ff;
+    --cf-warn: #ff6b35;
+    --cf-text: #e8edf5;
+    --cf-muted: #5a6580;
+    --cf-danger: #ff4757;
+    --cf-purple: #a259ff;
+}
+
+/* ── BASE ───────────────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--cf-bg) !important;
+    color: var(--cf-text) !important;
+    font-family: "DM Sans", sans-serif !important;
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 100vh;
+}
+
+/* ── NAV ────────────────────────────────────────────────────────────────────── */
+.cf-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+    height: 56px;
+    border-bottom: 1px solid var(--cf-border);
+    background: rgba(10, 13, 18, 0.96);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(12px);
+}
+.cf-logo {
+    font-family: "Space Mono", monospace;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    color: var(--cf-accent);
+    white-space: nowrap;
+    user-select: none;
+}
+.cf-logo-slash {
+    color: var(--cf-muted);
+}
+.cf-logo-sub {
+    color: var(--cf-muted);
+    margin-left: 8px;
+    font-size: 11px;
+}
+
+.cf-nav-tabs {
+    display: flex;
+    gap: 2px;
+}
+.cf-nav-tab {
+    padding: 6px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    color: var(--cf-muted);
+    transition:
+        color 0.2s,
+        background 0.2s;
+    user-select: none;
+    white-space: nowrap;
+    background: transparent;
+    border: none;
+    font-family: "DM Sans", sans-serif;
+}
+.cf-nav-tab:hover {
+    color: var(--cf-text);
+}
+.cf-nav-tab.active {
+    background: var(--cf-surface2);
+    color: var(--cf-accent);
+}
+
+.cf-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.cf-badge {
+    background: var(--cf-surface2);
+    border: 1px solid var(--cf-border);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    color: var(--cf-muted);
+    white-space: nowrap;
+}
+.cf-badge-online {
+    color: var(--cf-accent) !important;
+    border-color: rgba(0, 229, 160, 0.3) !important;
+}
+
+/* ── DB ALERT ───────────────────────────────────────────────────────────────── */
+.cf-db-alert {
+    padding: 8px 28px;
+    font-size: 12px;
+    text-align: center;
+}
+
+/* ── PAGE ───────────────────────────────────────────────────────────────────── */
+.cf-page {
+    padding: 24px 28px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* ── CARDS ──────────────────────────────────────────────────────────────────── */
+.cf-card {
+    background: var(--cf-surface);
+    border: 1px solid var(--cf-border);
+    border-radius: 14px;
+    padding: 20px 22px;
+    position: relative;
+    overflow: hidden;
+}
+.cf-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: transparent;
+}
+.cf-card.green::before {
+    background: var(--cf-accent);
+}
+.cf-card.blue::before {
+    background: var(--cf-accent2);
+}
+.cf-card.orange::before {
+    background: var(--cf-warn);
+}
+.cf-card.purple::before {
+    background: var(--cf-purple);
+}
+
+.cf-card-label {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--cf-muted);
+    margin-bottom: 8px;
+}
+.cf-card-value {
+    font-family: "Space Mono", monospace;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 6px;
+    color: var(--cf-text);
+}
+.cf-card-value.green {
+    color: var(--cf-accent);
+}
+.cf-card-value.blue {
+    color: var(--cf-accent2);
+}
+.cf-card-value.orange {
+    color: var(--cf-warn);
+}
+.cf-card-value.red {
+    color: var(--cf-danger);
+}
+.cf-card-sub {
+    font-size: 12px;
+    color: var(--cf-muted);
+}
+
+.cf-delta {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+}
+.cf-delta.up {
+    color: var(--cf-accent);
+}
+.cf-delta.down {
+    color: var(--cf-danger);
+}
+
+/* ── ¿ME ALCANZA? CARD ──────────────────────────────────────────────────────── */
+.cf-alcanza-card {
+    background: linear-gradient(135deg, #0f1a2e 0%, #0d2218 100%);
+    border: 1px solid rgba(0, 229, 160, 0.2) !important;
+}
+.cf-alcanza-card::before {
+    display: none;
+}
+.cf-alcanza-card .cf-card-label {
+    color: var(--cf-accent);
+}
+.cf-alcanza-result {
+    margin-top: 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+}
+.cf-alcanza-result.ok {
+    background: rgba(0, 229, 160, 0.12);
+    color: var(--cf-accent);
+}
+.cf-alcanza-result.no {
+    background: rgba(255, 71, 87, 0.12);
+    color: var(--cf-danger);
+}
+
+/* ── GRIDS ──────────────────────────────────────────────────────────────────── */
+.cf-topline {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 280px;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+.cf-main-grid {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+.cf-grid-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+/* ── CHART CARD ─────────────────────────────────────────────────────────────── */
+.cf-chart-card {
+    background: var(--cf-surface);
+    border: 1px solid var(--cf-border);
+    border-radius: 14px;
+    padding: 20px;
+}
+.cf-chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+.cf-chart-title {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* ── CHIPS ──────────────────────────────────────────────────────────────────── */
+.cf-chip-group {
+    display: flex;
+    gap: 6px;
+}
+.cf-chip {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    cursor: pointer;
+    border: 1px solid var(--cf-border);
+    color: var(--cf-muted);
+    background: transparent;
+    transition: all 0.15s;
+    user-select: none;
+    font-family: "DM Sans", sans-serif;
+}
+.cf-chip:hover {
+    color: var(--cf-text);
+}
+.cf-chip.active {
+    background: var(--cf-accent);
+    color: #000;
+    border-color: var(--cf-accent);
+    font-weight: 600;
+}
+
+/* ── SIDE PANEL ─────────────────────────────────────────────────────────────── */
+.cf-side-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.cf-section-title {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cf-muted);
+    margin-bottom: 10px;
+}
+
+/* ── TARJETA ITEMS ──────────────────────────────────────────────────────────── */
+.cf-tarjeta-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--cf-surface2);
+    border: 1px solid var(--cf-border);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    margin-bottom: 8px;
+}
+.cf-tarjeta-item:last-child {
+    margin-bottom: 0;
+}
+.cf-tarjeta-item:hover {
+    border-color: rgba(0, 229, 160, 0.3);
+}
+
+.cf-card-chip {
+    width: 36px;
+    height: 24px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+}
+.cf-card-chip.visa {
+    background: #1a1f71;
+    color: #fff;
+}
+.cf-card-chip.mc {
+    background: linear-gradient(135deg, #eb001b, #f79e1b);
+    color: #fff;
+}
+.cf-card-chip.amex {
+    background: #007bc1;
+    color: #fff;
+}
+.cf-card-chip.default {
+    background: var(--cf-surface);
+    border: 1px solid var(--cf-border);
+    color: var(--cf-muted);
+}
+
+.cf-tarjeta-info {
+    flex: 1;
+    min-width: 0;
+}
+.cf-tarjeta-name {
+    font-size: 13px;
+    font-weight: 500;
+}
+.cf-tarjeta-num {
+    font-size: 11px;
+    color: var(--cf-muted);
+    font-family: "Space Mono", monospace;
+}
+.cf-tarjeta-right {
+    text-align: right;
+    flex-shrink: 0;
+}
+.cf-tarjeta-limit-text {
+    font-size: 12px;
+    font-family: "Space Mono", monospace;
+}
+.cf-limit-bar {
+    width: 60px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 2px;
+    margin-top: 4px;
+    margin-left: auto;
+}
+.cf-limit-fill {
+    height: 100%;
+    border-radius: 2px;
+}
+
+/* ── PRÓXIMOS PAGOS ─────────────────────────────────────────────────────────── */
+.cf-pago-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--cf-border);
+    background: var(--cf-surface2);
+    margin-bottom: 6px;
+}
+.cf-pago-item:last-child {
+    margin-bottom: 0;
+}
+.cf-pago-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.cf-pago-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+.cf-pago-name {
+    font-size: 13px;
+}
+.cf-pago-date {
+    font-size: 11px;
+    color: var(--cf-muted);
+}
+.cf-pago-monto {
+    font-family: "Space Mono", monospace;
+    font-size: 13px;
+}
+
+/* ── UPLOAD ZONE ────────────────────────────────────────────────────────────── */
+.cf-upload-zone {
+    background: var(--cf-surface);
+    border: 1.5px dashed rgba(0, 229, 160, 0.25);
+    border-radius: 14px;
+    padding: 32px 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+}
+.cf-upload-zone:hover {
+    border-color: var(--cf-accent);
+    background: rgba(0, 229, 160, 0.04);
+}
+.cf-upload-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+.cf-upload-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+.cf-upload-sub {
+    font-size: 12px;
+    color: var(--cf-muted);
+}
+.cf-upload-pills {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin-top: 12px;
+    flex-wrap: wrap;
+}
+.cf-upload-pill {
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    background: var(--cf-surface2);
+    border: 1px solid var(--cf-border);
+    color: var(--cf-muted);
+}
+.cf-new-badge {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    background: rgba(0, 229, 160, 0.15);
+    color: var(--cf-accent);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+/* ── TABLE CARD ─────────────────────────────────────────────────────────────── */
+.cf-table-card {
+    background: var(--cf-surface);
+    border: 1px solid var(--cf-border);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 16px;
+}
+.cf-table-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--cf-border);
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.cf-table-title {
+    font-size: 13px;
+    font-weight: 600;
+}
+.cf-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.cf-table th {
+    padding: 10px 16px;
+    text-align: left;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cf-muted);
+    background: var(--cf-surface2);
+    border-bottom: 1px solid var(--cf-border);
+    font-family: "DM Sans", sans-serif;
+    font-weight: 500;
+}
+.cf-table td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--cf-border);
+    font-size: 13px;
+    color: var(--cf-text);
+}
+.cf-table tr:last-child td {
+    border-bottom: none;
+}
+.cf-table tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* ── TABLE BADGES ───────────────────────────────────────────────────────────── */
+.cf-cat-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+}
+.cf-amount-cargo {
+    color: var(--cf-danger);
+    font-family: "Space Mono", monospace;
+}
+.cf-amount-abono {
+    color: var(--cf-accent);
+    font-family: "Space Mono", monospace;
+}
+.cf-msi-pill {
+    background: rgba(162, 89, 255, 0.15);
+    color: #c084fc;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-family: "Space Mono", monospace;
+}
+.cf-date-cell {
+    color: var(--cf-muted);
+    font-family: "Space Mono", monospace;
+    font-size: 12px;
+}
+
+/* ── META AHORRO ────────────────────────────────────────────────────────────── */
+.cf-meta-card {
+    background: var(--cf-surface);
+    border: 1px solid var(--cf-border);
+    border-radius: 14px;
+    padding: 20px;
+}
+.cf-meta-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+.cf-meta-name {
+    font-size: 13px;
+    font-weight: 500;
+}
+.cf-meta-vals {
+    font-size: 12px;
+    color: var(--cf-muted);
+    font-family: "Space Mono", monospace;
+}
+.cf-prog-bar {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 3px;
+    margin-bottom: 12px;
+}
+.cf-prog-fill {
+    height: 100%;
+    border-radius: 3px;
+}
+
+/* ── FORM INPUTS (dark override) ────────────────────────────────────────────── */
+.form-control,
+.form-select {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    color: var(--cf-text) !important;
+    border-radius: 8px !important;
+}
+.form-control:focus,
+.form-select:focus {
+    background: rgba(255, 255, 255, 0.07) !important;
+    border-color: var(--cf-accent) !important;
+    box-shadow: 0 0 0 0.15rem rgba(0, 229, 160, 0.15) !important;
+    color: var(--cf-text) !important;
+}
+.form-control::placeholder {
+    color: var(--cf-muted) !important;
+}
+.form-label {
+    color: var(--cf-muted) !important;
+    font-size: 11px !important;
+    letter-spacing: 0.06em !important;
+    text-transform: uppercase !important;
+    margin-bottom: 6px !important;
+}
+
+/* Dash dcc.Dropdown */
+.Select-control {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 8px !important;
+    color: var(--cf-text) !important;
+}
+.Select-control:hover {
+    border-color: rgba(255, 255, 255, 0.25) !important;
+}
+.is-focused .Select-control,
+.is-open .Select-control {
+    border-color: var(--cf-accent) !important;
+    box-shadow: none !important;
+}
+.Select-menu-outer {
+    background: var(--cf-surface2) !important;
+    border: 1px solid var(--cf-border) !important;
+    border-radius: 8px !important;
+}
+.Select-option {
+    background: transparent !important;
+    color: var(--cf-text) !important;
+}
+.Select-option:hover,
+.Select-option.is-focused {
+    background: rgba(0, 229, 160, 0.1) !important;
+    color: var(--cf-accent) !important;
+}
+.Select-option.is-selected {
+    background: rgba(0, 229, 160, 0.15) !important;
+    color: var(--cf-accent) !important;
+}
+.Select-value-label {
+    color: var(--cf-text) !important;
+}
+.Select-placeholder {
+    color: var(--cf-muted) !important;
+}
+.Select-arrow {
+    border-top-color: var(--cf-muted) !important;
+}
+.Select-clear {
+    color: var(--cf-muted) !important;
+}
+
+/* dbc.Switch */
+.form-check-input:checked {
+    background-color: var(--cf-accent) !important;
+    border-color: var(--cf-accent) !important;
+}
+.form-check-label {
+    color: var(--cf-text) !important;
+}
+
+/* dbc.Progress */
+.progress {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-radius: 3px !important;
+    height: 8px !important;
+}
+.progress-bar {
+    border-radius: 3px !important;
+}
+.progress-bar.bg-success {
+    background-color: var(--cf-accent) !important;
+}
+.progress-bar.bg-warning {
+    background-color: var(--cf-warn) !important;
+}
+.progress-bar.bg-danger {
+    background-color: var(--cf-danger) !important;
+}
+
+/* Buttons */
+.btn-primary {
+    background: var(--cf-accent) !important;
+    border-color: var(--cf-accent) !important;
+    color: #000 !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+}
+.btn-primary:hover,
+.btn-primary:active,
+.btn-primary:focus {
+    background: #00c98e !important;
+    border-color: #00c98e !important;
+    color: #000 !important;
+    box-shadow: 0 0 0 0.2rem rgba(0, 229, 160, 0.25) !important;
+}
+.btn-success {
+    background: var(--cf-accent2) !important;
+    border-color: var(--cf-accent2) !important;
+    color: #fff !important;
+    border-radius: 8px !important;
+}
+.btn-danger {
+    background: var(--cf-danger) !important;
+    border-color: var(--cf-danger) !important;
+    border-radius: 8px !important;
+}
+.btn-outline-secondary {
+    color: var(--cf-muted) !important;
+    border-color: var(--cf-border) !important;
+    border-radius: 8px !important;
+}
+.btn-outline-secondary:hover {
+    background: var(--cf-surface2) !important;
+    color: var(--cf-text) !important;
+}
+
+/* dbc.Alert */
+.alert {
+    border-radius: 10px !important;
+}
+.alert-success {
+    background: rgba(0, 229, 160, 0.1) !important;
+    border-color: rgba(0, 229, 160, 0.3) !important;
+    color: var(--cf-accent) !important;
+}
+.alert-danger {
+    background: rgba(255, 71, 87, 0.1) !important;
+    border-color: rgba(255, 71, 87, 0.3) !important;
+    color: var(--cf-danger) !important;
+}
+.alert-warning {
+    background: rgba(255, 107, 53, 0.1) !important;
+    border-color: rgba(255, 107, 53, 0.3) !important;
+    color: var(--cf-warn) !important;
+}
+.alert-info {
+    background: rgba(0, 153, 255, 0.1) !important;
+    border-color: rgba(0, 153, 255, 0.3) !important;
+    color: var(--cf-accent2) !important;
+}
+.btn-close {
+    filter: invert(1) !important;
+}
+
+/* dbc.Card override to match surface */
+.card {
+    background: var(--cf-surface) !important;
+    border: 1px solid var(--cf-border) !important;
+    border-radius: 14px !important;
+    color: var(--cf-text) !important;
+}
+.card-header {
+    background: var(--cf-surface2) !important;
+    border-bottom: 1px solid var(--cf-border) !important;
+    color: var(--cf-text) !important;
+    border-radius: 14px 14px 0 0 !important;
+}
+.card-body {
+    background: transparent !important;
+}
+
+/* Dash DataTable dark override */
+.dash-table-container {
+    background: transparent !important;
+}
+.dash-spreadsheet-container {
+    background: transparent !important;
+}
+.dash-spreadsheet-inner table {
+    background: transparent !important;
+    color: var(--cf-text) !important;
+}
+.dash-spreadsheet td,
+.dash-spreadsheet td.dash-cell {
+    background: transparent !important;
+    color: var(--cf-text) !important;
+    border-bottom: 1px solid var(--cf-border) !important;
+    padding: 11px 16px !important;
+    font-size: 13px !important;
+    font-family: "DM Sans", sans-serif !important;
+}
+.dash-spreadsheet th,
+.dash-spreadsheet th.dash-header {
+    background: var(--cf-surface2) !important;
+    color: var(--cf-muted) !important;
+    border-bottom: 1px solid var(--cf-border) !important;
+    padding: 10px 16px !important;
+    font-size: 10px !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+    font-family: "DM Sans", sans-serif !important;
+}
+.dash-spreadsheet tbody tr:hover td {
+    background: rgba(255, 255, 255, 0.02) !important;
+}
+.dash-spreadsheet .previous-page,
+.dash-spreadsheet .next-page {
+    color: var(--cf-accent) !important;
+}
+
+/* ── ALCANZA INPUT ───────────────────────────────────────────────────────────── */
+.cf-mini-input {
+    background: rgba(0, 0, 0, 0.4) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 8px !important;
+    padding: 8px 12px !important;
+    color: var(--cf-text) !important;
+    font-family: "Space Mono", monospace !important;
+    font-size: 14px !important;
+    outline: none;
+}
+.cf-mini-input:focus {
+    border-color: var(--cf-accent) !important;
+}
+.cf-btn-check {
+    background: var(--cf-accent) !important;
+    color: #000 !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 8px 14px !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    cursor: pointer;
+    white-space: nowrap;
+    font-family: "DM Sans", sans-serif;
+}
+.cf-btn-check:hover {
+    background: #00c98e !important;
+}
+
+/* ── METAS FORM ─────────────────────────────────────────────────────────────── */
+.cf-meta-form-card {
+    background: var(--cf-surface2);
+    border: 1px solid var(--cf-border);
+    border-radius: 14px;
+    padding: 20px;
+    margin-top: 16px;
+}
+.cf-meta-item {
+    background: var(--cf-surface2);
+    border: 1px solid var(--cf-border);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 12px;
+}
+
+/* ── EC PAGE (Estado de Cuenta) ─────────────────────────────────────────────── */
+.cf-ec-filters {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--cf-border);
+    flex-wrap: wrap;
+}
+
+/* ── SCROLLBAR ──────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--cf-surface2);
+    border-radius: 3px;
+}
+
+/* ── SPACING HELPERS ────────────────────────────────────────────────────────── */
+.cf-spacer {
+    height: 32px;
+}
+.cf-link {
+    color: var(--cf-accent);
+    cursor: pointer;
+    font-size: 12px;
+}
+.cf-link:hover {
+    color: #00c98e;
+}
+
+/* ── RESPONSIVE ─────────────────────────────────────────────────────────────── */
+@media (max-width: 1100px) {
+    .cf-topline {
+        grid-template-columns: 1fr 1fr;
+    }
+    .cf-main-grid {
+        grid-template-columns: 1fr;
+    }
+    .cf-grid-bottom {
+        grid-template-columns: 1fr;
+    }
+}
+@media (max-width: 600px) {
+    .cf-topline {
+        grid-template-columns: 1fr;
+    }
+    .cf-nav {
+        padding: 0 16px;
+    }
+    .cf-page {
+        padding: 16px;
+    }
+    .cf-nav-tabs {
+        display: none;
+    }
+}

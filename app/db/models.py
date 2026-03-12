@@ -62,3 +62,13 @@ class PerfilFinanciero(Base):
     __tablename__ = "perfil_financiero"
     id = Column(Integer, primary_key=True)
     ingreso_mensual = Column(Float, nullable=False, default=0.0)
+
+
+class MetaAhorro(Base):
+    __tablename__ = "metas_ahorro"
+    id = Column(Integer, primary_key=True)
+    nombre = Column(String, nullable=False)
+    emoji = Column(String, default="🎯")
+    monto_objetivo = Column(Float, nullable=False)
+    monto_actual = Column(Float, nullable=False, default=0.0)
+    color = Column(String, default="#0099ff")
