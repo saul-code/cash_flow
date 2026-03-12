@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cash Flow — Redesign Mockup</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0d12;
+    --surface: #111620;
+    --surface2: #181f2e;
+    --border: rgba(255,255,255,0.07);
+    --accent: #00e5a0;
+    --accent2: #0099ff;
+    --warn: #ff6b35;
+    --text: #e8edf5;
+    --muted: #5a6580;
+    --success: #00e5a0;
+    --danger: #ff4757;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  /* ── NAV ── */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+    height: 56px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(10,13,18,0.95);
+    position: sticky; top:0; z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+  .logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+  }
+  .logo span { color: var(--muted); }
+  .nav-tabs { display: flex; gap: 2px; }
+  .nav-tab {
+    padding: 6px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    color: var(--muted);
+    transition: all 0.2s;
+  }
+  .nav-tab.active { background: var(--surface2); color: var(--accent); }
+  .nav-tab:hover:not(.active) { color: var(--text); }
+  .nav-right { display: flex; align-items: center; gap: 12px; }
+  .badge {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* ── LAYOUT ── */
+  .page { padding: 24px 28px; max-width: 1400px; margin: 0 auto; }
+
+  /* ── TOPLINE CARDS ── */
+  .topline {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 280px;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content:'';
+    position: absolute;
+    top:0; left:0; right:0;
+    height: 2px;
+  }
+  .card.green::before { background: var(--accent); }
+  .card.blue::before { background: var(--accent2); }
+  .card.orange::before { background: var(--warn); }
+  .card.purple::before { background: #a259ff; }
+
+  .card-label {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .card-value {
+    font-family: 'Space Mono', monospace;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .card-value.green { color: var(--accent); }
+  .card-value.blue { color: var(--accent2); }
+  .card-value.orange { color: var(--warn); }
+  .card-value.red { color: var(--danger); }
+  .card-sub { font-size: 12px; color: var(--muted); }
+  .delta { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; }
+  .delta.up { color: var(--accent); }
+  .delta.down { color: var(--danger); }
+
+  /* ── ¿ME ALCANZA? CARD ── */
+  .alcanza-card {
+    background: linear-gradient(135deg, #0f1a2e 0%, #0d2218 100%);
+    border: 1px solid rgba(0,229,160,0.2);
+  }
+  .alcanza-card .card-label { color: var(--accent); }
+  .alcanza-input-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .mini-input {
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    width: 130px;
+    outline: none;
+  }
+  .mini-input:focus { border-color: var(--accent); }
+  .btn-check {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .alcanza-result {
+    margin-top: 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .alcanza-result.ok { background: rgba(0,229,160,0.12); color: var(--accent); }
+  .alcanza-result.no { background: rgba(255,71,87,0.12); color: var(--danger); }
+
+  /* ── MAIN GRID ── */
+  .main-grid {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  /* ── CHART CARD ── */
+  .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
+  .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .chart-title { font-size: 13px; font-weight: 600; }
+  .chip-group { display: flex; gap: 6px; }
+  .chip {
+    padding: 4px 10px; border-radius: 20px; font-size: 11px; cursor: pointer;
+    border: 1px solid var(--border); color: var(--muted);
+  }
+  .chip.active { background: var(--accent); color: #000; border-color: var(--accent); font-weight:600; }
+
+  /* Fake chart */
+  .fake-chart { width:100%; height:180px; position:relative; }
+  .fake-chart svg { width:100%; height:100%; }
+
+  /* ── SIDE PANEL ── */
+  .side-panel { display: flex; flex-direction: column; gap: 14px; }
+
+  /* Tarjetas list */
+  .section-title {
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 10px;
+  }
+  .tarjeta-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  .tarjeta-item:hover { border-color: rgba(0,229,160,0.3); }
+  .card-chip {
+    width: 36px; height: 24px; border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; font-weight: 700; letter-spacing: 0.05em;
+  }
+  .card-chip.visa { background: #1a1f71; color: #fff; }
+  .card-chip.mc { background: linear-gradient(135deg,#eb001b,#f79e1b); color:#fff; }
+  .card-chip.amex { background: #007bc1; color:#fff; }
+  .tarjeta-info { flex:1; }
+  .tarjeta-name { font-size: 13px; font-weight: 500; }
+  .tarjeta-num { font-size: 11px; color: var(--muted); font-family: 'Space Mono', monospace; }
+  .tarjeta-limit { text-align:right; }
+  .limit-bar { width: 60px; height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; margin-top: 4px; margin-left: auto; }
+  .limit-fill { height:100%; border-radius:2px; }
+
+  /* Próximos pagos */
+  .pago-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    margin-bottom: 6px;
+  }
+  .pago-left { display:flex; align-items:center; gap:10px; }
+  .pago-dot { width:8px; height:8px; border-radius:50%; }
+  .pago-name { font-size: 13px; }
+  .pago-date { font-size: 11px; color: var(--muted); }
+  .pago-monto { font-family: 'Space Mono', monospace; font-size: 13px; }
+
+  /* ── OCR UPLOAD ── */
+  .upload-zone {
+    background: var(--surface);
+    border: 1.5px dashed rgba(0,229,160,0.25);
+    border-radius: 14px;
+    padding: 32px 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .upload-zone:hover { border-color: var(--accent); background: rgba(0,229,160,0.04); }
+  .upload-icon { font-size: 32px; margin-bottom: 10px; }
+  .upload-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .upload-sub { font-size: 12px; color: var(--muted); }
+  .upload-pills { display:flex; gap:6px; justify-content:center; margin-top:12px; }
+  .upload-pill {
+    padding: 3px 10px; border-radius: 20px;
+    font-size: 11px; background: var(--surface2);
+    border: 1px solid var(--border); color: var(--muted);
+  }
+
+  /* ── TRANSACTIONS TABLE ── */
+  .table-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+  .table-header-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px; border-bottom: 1px solid var(--border);
+  }
+  .search-box {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 6px 12px; color: var(--text);
+    font-size: 12px; outline:none; width: 200px;
+  }
+  .search-box::placeholder { color: var(--muted); }
+  table { width:100%; border-collapse: collapse; }
+  th {
+    padding: 10px 16px; text-align:left;
+    font-size: 10px; letter-spacing:0.1em; text-transform:uppercase;
+    color: var(--muted); background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+  }
+  td { padding: 11px 16px; border-bottom: 1px solid var(--border); font-size: 13px; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  .cat-badge {
+    display: inline-block; padding: 2px 8px; border-radius: 4px;
+    font-size: 11px; font-weight: 500;
+  }
+  .amount-cargo { color: var(--danger); font-family: 'Space Mono', monospace; }
+  .amount-abono { color: var(--accent); font-family: 'Space Mono', monospace; }
+  .msi-pill {
+    background: rgba(162,89,255,0.15); color: #c084fc;
+    padding: 2px 8px; border-radius: 4px; font-size: 11px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* ── META AHORRO ── */
+  .meta-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+  }
+  .meta-progress {
+    margin-top: 12px;
+  }
+  .meta-row {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 4px;
+  }
+  .meta-name { font-size: 13px; font-weight: 500; }
+  .meta-vals { font-size: 12px; color: var(--muted); font-family: 'Space Mono', monospace; }
+  .prog-bar { height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; margin-bottom: 12px; }
+  .prog-fill { height:100%; border-radius:3px; }
+
+  /* Responsive note */
+  .grid-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+
+  /* ── ANNOTATIONS ── */
+  .annotation {
+    position: absolute;
+    background: rgba(0,229,160,0.9);
+    color: #000;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    z-index: 10;
+  }
+  .annotation::after {
+    content:'';
+    position:absolute;
+    left:-6px; top:50%; transform:translateY(-50%);
+    border: 3px solid transparent;
+    border-right-color: rgba(0,229,160,0.9);
+  }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width:6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius:3px; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">CF<span>//</span>FLOW <span style="color:var(--muted);margin-left:4px;font-size:11px;">finanzas personales</span></div>
+  <div class="nav-tabs">
+    <div class="nav-tab active">Dashboard</div>
+    <div class="nav-tab">Registro</div>
+    <div class="nav-tab">Estado de Cuenta</div>
+    <div class="nav-tab">Metas</div>
+    <div class="nav-tab">Configuración</div>
+  </div>
+  <div class="nav-right">
+    <div class="badge">Mar 2026</div>
+    <div class="badge" style="color:var(--accent);border-color:rgba(0,229,160,0.3)">● En línea</div>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- TOP CARDS -->
+  <div class="topline">
+
+    <div class="card green" style="position:relative">
+      <div class="annotation" style="right:16px;top:16px;">💡 Saldo libre</div>
+      <div class="card-label">Saldo Disponible</div>
+      <div class="card-value green">$14,820</div>
+      <div class="card-sub">
+        <span class="delta up">↑ +$3,200 vs mes anterior</span>
+      </div>
+    </div>
+
+    <div class="card blue">
+      <div class="card-label">Gasto del Mes</div>
+      <div class="card-value blue">$8,430</div>
+      <div class="card-sub">
+        <span class="delta down">↑ 72% del límite mensual · $11,700</span>
+      </div>
+    </div>
+
+    <div class="card orange">
+      <div class="card-label">Próximo Pago</div>
+      <div class="card-value orange">$3,200</div>
+      <div class="card-sub">Banamex •••4521 &nbsp;·&nbsp; 16 Mar 2026 (en 5d)</div>
+    </div>
+
+    <!-- ¿ME ALCANZA? -->
+    <div class="card alcanza-card">
+      <div class="card-label">¿Me alcanza?</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">¿Cuánto quiero gastar?</div>
+      <div class="alcanza-input-row">
+        <input class="mini-input" type="text" placeholder="$0.00" value="$2,500">
+        <button class="btn-check">Calcular</button>
+      </div>
+      <div class="alcanza-result ok">
+        ✓ Sí te alcanza — te quedan $12,320
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="main-grid">
+
+    <!-- CHART + UPLOAD -->
+    <div style="display:flex;flex-direction:column;gap:14px;">
+
+      <div class="chart-card">
+        <div class="chart-header">
+          <div class="chart-title">Flujo del Mes — Ingresos vs Egresos</div>
+          <div class="chip-group">
+            <div class="chip active">Semana</div>
+            <div class="chip">Mes</div>
+            <div class="chip">3M</div>
+          </div>
+        </div>
+        <!-- Fake area chart -->
+        <div class="fake-chart">
+          <svg viewBox="0 0 700 180" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="gIncome" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#00e5a0" stop-opacity="0.3"/>
+                <stop offset="100%" stop-color="#00e5a0" stop-opacity="0"/>
+              </linearGradient>
+              <linearGradient id="gExpense" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#ff4757" stop-opacity="0.25"/>
+                <stop offset="100%" stop-color="#ff4757" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <!-- Grid lines -->
+            <line x1="0" y1="40" x2="700" y2="40" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="0" y1="80" x2="700" y2="80" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="0" y1="120" x2="700" y2="120" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="0" y1="160" x2="700" y2="160" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <!-- Income area -->
+            <path d="M0,140 C80,130 120,60 200,50 C280,40 320,80 400,70 C480,60 540,30 700,20 L700,180 L0,180 Z"
+              fill="url(#gIncome)"/>
+            <path d="M0,140 C80,130 120,60 200,50 C280,40 320,80 400,70 C480,60 540,30 700,20"
+              fill="none" stroke="#00e5a0" stroke-width="2"/>
+            <!-- Expense area -->
+            <path d="M0,160 C60,155 100,100 200,110 C300,120 360,90 450,100 C520,108 600,130 700,120 L700,180 L0,180 Z"
+              fill="url(#gExpense)"/>
+            <path d="M0,160 C60,155 100,100 200,110 C300,120 360,90 450,100 C520,108 600,130 700,120"
+              fill="none" stroke="#ff4757" stroke-width="2"/>
+            <!-- Dots -->
+            <circle cx="400" cy="70" r="4" fill="#00e5a0"/>
+            <circle cx="450" cy="100" r="4" fill="#ff4757"/>
+            <!-- Labels -->
+            <text x="10" y="35" fill="rgba(255,255,255,0.25)" font-size="9" font-family="DM Sans">$18K</text>
+            <text x="10" y="75" fill="rgba(255,255,255,0.25)" font-size="9" font-family="DM Sans">$12K</text>
+            <text x="10" y="115" fill="rgba(255,255,255,0.25)" font-size="9" font-family="DM Sans">$6K</text>
+          </svg>
+        </div>
+        <div style="display:flex;gap:16px;margin-top:8px;">
+          <span style="font-size:11px;color:var(--accent)">● Ingresos</span>
+          <span style="font-size:11px;color:var(--danger)">● Egresos</span>
+          <span style="font-size:11px;color:var(--muted)">● MSI no cuenta como gasto real</span>
+        </div>
+      </div>
+
+      <!-- OCR UPLOAD — NEW FEATURE -->
+      <div class="upload-zone" style="position:relative;">
+        <div style="position:absolute;top:12px;right:14px;background:rgba(0,229,160,0.15);color:var(--accent);padding:3px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.05em;">NUEVO</div>
+        <div class="upload-icon">📄</div>
+        <div class="upload-title">Importar Estado de Cuenta</div>
+        <div class="upload-sub">Arrastra tu PDF o imagen — la app detecta y llena las transacciones automáticamente</div>
+        <div class="upload-pills">
+          <div class="upload-pill">PDF</div>
+          <div class="upload-pill">PNG / JPG</div>
+          <div class="upload-pill">Banamex</div>
+          <div class="upload-pill">BBVA</div>
+          <div class="upload-pill">Santander</div>
+          <div class="upload-pill">Amex</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SIDE PANEL -->
+    <div class="side-panel">
+
+      <!-- TARJETAS -->
+      <div class="card" style="padding:18px 20px;">
+        <div class="section-title">Mis Tarjetas</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+
+          <div class="tarjeta-item">
+            <div class="card-chip visa">VISA</div>
+            <div class="tarjeta-info">
+              <div class="tarjeta-name">Banamex Oro</div>
+              <div class="tarjeta-num">•••• 4521</div>
+            </div>
+            <div class="tarjeta-limit">
+              <div style="font-size:12px;font-family:'Space Mono',monospace;">$3,200/$20K</div>
+              <div class="limit-bar"><div class="limit-fill" style="width:16%;background:var(--accent)"></div></div>
+            </div>
+          </div>
+
+          <div class="tarjeta-item">
+            <div class="card-chip mc">MC</div>
+            <div class="tarjeta-info">
+              <div class="tarjeta-name">BBVA Azul</div>
+              <div class="tarjeta-num">•••• 8834</div>
+            </div>
+            <div class="tarjeta-limit">
+              <div style="font-size:12px;font-family:'Space Mono',monospace;">$5,800/$15K</div>
+              <div class="limit-bar"><div class="limit-fill" style="width:38%;background:var(--warn)"></div></div>
+            </div>
+          </div>
+
+          <div class="tarjeta-item">
+            <div class="card-chip amex">AMEX</div>
+            <div class="tarjeta-info">
+              <div class="tarjeta-name">Amex Gold</div>
+              <div class="tarjeta-num">•••• 1102</div>
+            </div>
+            <div class="tarjeta-limit">
+              <div style="font-size:12px;font-family:'Space Mono',monospace;">$890/$30K</div>
+              <div class="limit-bar"><div class="limit-fill" style="width:3%;background:var(--accent)"></div></div>
+            </div>
+          </div>
+
+        </div>
+        <div style="margin-top:12px;text-align:center;">
+          <span style="font-size:12px;color:var(--accent);cursor:pointer;">+ Agregar tarjeta</span>
+        </div>
+      </div>
+
+      <!-- PRÓXIMOS PAGOS -->
+      <div class="card" style="padding:18px 20px;">
+        <div class="section-title">Próximos Pagos</div>
+        <div class="pago-item">
+          <div class="pago-left">
+            <div class="pago-dot" style="background:#ff4757"></div>
+            <div>
+              <div class="pago-name">Banamex Oro</div>
+              <div class="pago-date">16 Mar 2026 · en 5 días</div>
+            </div>
+          </div>
+          <div class="pago-monto" style="color:var(--danger)">$3,200</div>
+        </div>
+        <div class="pago-item">
+          <div class="pago-left">
+            <div class="pago-dot" style="background:var(--warn)"></div>
+            <div>
+              <div class="pago-name">BBVA Azul</div>
+              <div class="pago-date">22 Mar 2026 · en 11 días</div>
+            </div>
+          </div>
+          <div class="pago-monto" style="color:var(--warn)">$5,800</div>
+        </div>
+        <div class="pago-item">
+          <div class="pago-left">
+            <div class="pago-dot" style="background:var(--accent)"></div>
+            <div>
+              <div class="pago-name">Amex Gold</div>
+              <div class="pago-date">01 Abr 2026 · en 21 días</div>
+            </div>
+          </div>
+          <div class="pago-monto" style="color:var(--muted)">$890</div>
+        </div>
+      </div>
+
+      <!-- META AHORRO -->
+      <div class="meta-card">
+        <div class="section-title">Metas de Ahorro</div>
+        <div class="meta-progress">
+
+          <div class="meta-row">
+            <span class="meta-name">🏖️ Vacaciones Cancún</span>
+            <span class="meta-vals">$8,400 / $15,000</span>
+          </div>
+          <div class="prog-bar"><div class="prog-fill" style="width:56%;background:var(--accent2)"></div></div>
+
+          <div class="meta-row">
+            <span class="meta-name">💻 MacBook Pro</span>
+            <span class="meta-vals">$22,000 / $45,000</span>
+          </div>
+          <div class="prog-bar"><div class="prog-fill" style="width:48%;background:#a259ff"></div></div>
+
+          <div class="meta-row">
+            <span class="meta-name">🚨 Fondo Emergencia</span>
+            <span class="meta-vals">$5,000 / $20,000</span>
+          </div>
+          <div class="prog-bar"><div class="prog-fill" style="width:25%;background:var(--warn)"></div></div>
+
+        </div>
+        <div style="margin-top:8px;text-align:center;">
+          <span style="font-size:12px;color:var(--accent);cursor:pointer;">+ Nueva meta</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- BOTTOM GRID -->
+  <div class="grid-bottom">
+
+    <!-- GASTO POR CATEGORÍA (fake donut + list) -->
+    <div class="card" style="position:relative;">
+      <div class="card-label" style="margin-bottom:12px;">Gasto por Categoría — Marzo</div>
+      <div style="display:flex;align-items:center;gap:24px;">
+        <svg width="100" height="100" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="38" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="14"/>
+          <circle cx="50" cy="50" r="38" fill="none" stroke="#0099ff" stroke-width="14"
+            stroke-dasharray="85 155" stroke-dashoffset="0" transform="rotate(-90 50 50)"/>
+          <circle cx="50" cy="50" r="38" fill="none" stroke="#00e5a0" stroke-width="14"
+            stroke-dasharray="50 155" stroke-dashoffset="-85" transform="rotate(-90 50 50)"/>
+          <circle cx="50" cy="50" r="38" fill="none" stroke="#ff6b35" stroke-width="14"
+            stroke-dasharray="30 155" stroke-dashoffset="-135" transform="rotate(-90 50 50)"/>
+          <circle cx="50" cy="50" r="38" fill="none" stroke="#a259ff" stroke-width="14"
+            stroke-dasharray="25 155" stroke-dashoffset="-165" transform="rotate(-90 50 50)"/>
+          <text x="50" y="55" text-anchor="middle" fill="var(--text)" font-size="11" font-family="Space Mono">$8,430</text>
+        </svg>
+        <div style="display:flex;flex-direction:column;gap:8px;flex:1;">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:12px;display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:#0099ff;display:inline-block"></span>Alimentos</span>
+            <span style="font-family:'Space Mono';font-size:12px;">$3,100 <span style="color:var(--muted);font-size:10px;">37%</span></span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:12px;display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent);display:inline-block"></span>Entretenimiento</span>
+            <span style="font-family:'Space Mono';font-size:12px;">$1,800 <span style="color:var(--muted);font-size:10px;">21%</span></span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:12px;display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--warn);display:inline-block"></span>Transporte</span>
+            <span style="font-family:'Space Mono';font-size:12px;">$1,230 <span style="color:var(--muted);font-size:10px;">15%</span></span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:12px;display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:#a259ff;display:inline-block"></span>Suscripciones</span>
+            <span style="font-family:'Space Mono';font-size:12px;">$890 <span style="color:var(--muted);font-size:10px;">11%</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROYECCIÓN -->
+    <div class="card">
+      <div class="card-label" style="margin-bottom:12px;">Proyección — Si sigues así</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+
+        <div style="padding:12px 14px;background:rgba(0,229,160,0.08);border:1px solid rgba(0,229,160,0.2);border-radius:10px;">
+          <div style="font-size:11px;color:var(--accent);margin-bottom:2px;">Al fin de mes gastarás</div>
+          <div style="font-family:'Space Mono';font-size:18px;color:var(--accent);">$11,240</div>
+          <div style="font-size:11px;color:var(--muted);">de tu límite $11,700 — vas bien ✓</div>
+        </div>
+
+        <div style="padding:12px 14px;background:rgba(255,107,53,0.08);border:1px solid rgba(255,107,53,0.2);border-radius:10px;">
+          <div style="font-size:11px;color:var(--warn);margin-bottom:2px;">Para ahorrar $3,000 este mes debes gastar máx</div>
+          <div style="font-family:'Space Mono';font-size:18px;color:var(--warn);">$8,700</div>
+          <div style="font-size:11px;color:var(--muted);">Ajusta $2,540 en lo que resta del mes</div>
+        </div>
+
+        <div style="padding:12px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;font-size:12px;color:var(--muted);">
+          💡 <strong style="color:var(--text)">Tip:</strong> Reducir entretenimiento un 30% = $540 extra/mes
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TRANSACTIONS TABLE -->
+  <div class="table-card">
+    <div class="table-header-bar">
+      <div style="font-size:13px;font-weight:600;">Últimas Transacciones</div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input class="search-box" placeholder="🔍  Buscar...">
+        <div class="chip active">Todas</div>
+        <div class="chip">Cargos</div>
+        <div class="chip">Abonos</div>
+        <div class="chip">MSI</div>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Descripción</th>
+          <th>Monto</th>
+          <th>Tipo</th>
+          <th>Tarjeta</th>
+          <th>Categoría</th>
+          <th>MSI</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="color:var(--muted);font-family:'Space Mono';font-size:12px;">10 Mar</td>
+          <td>Amazon MX — Audífonos Sony</td>
+          <td class="amount-cargo">−$3,499</td>
+          <td><span style="color:var(--muted);font-size:12px;">Cargo</span></td>
+          <td><span style="font-size:12px;">Amex •1102</span></td>
+          <td><span class="cat-badge" style="background:rgba(0,153,255,0.12);color:#60a5fa;">Tecnología</span></td>
+          <td><span class="msi-pill">12 MSI</span></td>
+        </tr>
+        <tr>
+          <td style="color:var(--muted);font-family:'Space Mono';font-size:12px;">09 Mar</td>
+          <td>Transferencia OXXO Pay</td>
+          <td class="amount-abono">+$5,000</td>
+          <td><span style="color:var(--accent);font-size:12px;">Abono</span></td>
+          <td><span style="font-size:12px;">Banamex •4521</span></td>
+          <td><span class="cat-badge" style="background:rgba(0,229,160,0.1);color:var(--accent);">Ingreso</span></td>
+          <td><span style="color:var(--muted);font-size:11px;">—</span></td>
+        </tr>
+        <tr>
+          <td style="color:var(--muted);font-family:'Space Mono';font-size:12px;">08 Mar</td>
+          <td>Uber Eats — Sushi Itto</td>
+          <td class="amount-cargo">−$380</td>
+          <td><span style="color:var(--muted);font-size:12px;">Cargo</span></td>
+          <td><span style="font-size:12px;">BBVA •8834</span></td>
+          <td><span class="cat-badge" style="background:rgba(255,107,53,0.12);color:#fb923c;">Alimentos</span></td>
+          <td><span style="color:var(--muted);font-size:11px;">—</span></td>
+        </tr>
+        <tr>
+          <td style="color:var(--muted);font-family:'Space Mono';font-size:12px;">07 Mar</td>
+          <td>Netflix · Suscripción mensual</td>
+          <td class="amount-cargo">−$219</td>
+          <td><span style="color:var(--muted);font-size:12px;">Cargo</span></td>
+          <td><span style="font-size:12px;">Banamex •4521</span></td>
+          <td><span class="cat-badge" style="background:rgba(162,89,255,0.12);color:#c084fc;">Suscripciones</span></td>
+          <td><span style="color:var(--muted);font-size:11px;">—</span></td>
+        </tr>
+        <tr>
+          <td style="color:var(--muted);font-family:'Space Mono';font-size:12px;">06 Mar</td>
+          <td>OXXO Gas — Gasolinera</td>
+          <td class="amount-cargo">−$650</td>
+          <td><span style="color:var(--muted);font-size:12px;">Cargo</span></td>
+          <td><span style="font-size:12px;">BBVA •8834</span></td>
+          <td><span class="cat-badge" style="background:rgba(251,191,36,0.1);color:#fbbf24;">Transporte</span></td>
+          <td><span style="color:var(--muted);font-size:11px;">—</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="height:32px;"></div>
+</div>
+
+</body>
+</html>
