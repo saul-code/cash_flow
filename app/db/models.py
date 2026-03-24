@@ -72,3 +72,39 @@ class MetaAhorro(Base):
     monto_objetivo = Column(Float, nullable=False)
     monto_actual = Column(Float, nullable=False, default=0.0)
     color = Column(String, default="#0099ff")
+
+
+class CuentaLiquida(Base):
+    """
+    Representa dónde tienes tu dinero real generando rendimientos (ej. Cajita Nu) o efectivo físico.
+    """
+
+    __tablename__ = "cuentas_liquidas"
+    id = Column(Integer, primary_key=True)
+    nombre = Column(String, nullable=False)  # ej. "Cajita Nu", "Cartera Efectivo"
+    tasa_rendimiento_anual = Column(Float, default=0.0)  # ej. 0.13 para el 13% de Nu
+
+    movimientos = relationship("MovimientoLiquido", back_populates="cuenta")
+
+
+class MovimientoLiquido(Base):
+    """
+    Registra cada entrada y salida de tu dinero real.
+    """
+
+    __tablename__ = "movimientos_liquidos"
+    id = Column(Integer, primary_key=True)
+    cuenta_id = Column(Integer, ForeignKey("cuentas_liquidas.id"), nullable=False)
+    fecha = Column(Date, nullable=False)
+    descripcion = Column(
+        String, nullable=False
+    )  # ej. "Quincena", "Rendimiento Diario", "Retiro Efectivo"
+    monto = Column(Float, nullable=False)
+    tipo_movimiento = Column(String, nullable=False)  # 'ingreso' o 'egreso'
+
+    # Opcional: Relacionar un egreso de aquí con un abono a la tarjeta (para auditoría)
+    transaccion_tarjeta_id = Column(
+        Integer, ForeignKey("transacciones.id"), nullable=True
+    )
+
+    cuenta = relationship("CuentaLiquida", back_populates="movimientos")
