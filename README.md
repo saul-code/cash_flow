@@ -1,8 +1,9 @@
 # CF//FLOW — Finanzas Personales
 
 Aplicación web para el seguimiento de gastos personales, tarjetas de crédito y metas de ahorro. Construida con Python, Dash y PostgreSQL, empaquetada en Docker.
-
 ---
+
+![canvas](./app/assets/canvas.png)
 
 ## Tecnologías
 
